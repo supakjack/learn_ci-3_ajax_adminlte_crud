@@ -1,7 +1,5 @@
 <!-- page script -->
 <script>
-    var table;
-
     const get_obj_form = (selector) => {
         var data = {}
         var form = $(selector).serializeArray();
@@ -15,7 +13,7 @@
         $.post(base_url + "Person/delete", {
             id: id
         }, (response) => console.log(response), "json");
-        table.ajax.reload()
+        $("#table_data").DataTable().ajax.reload()
     }
 
     const open_edit_data = (id) => {
@@ -41,7 +39,7 @@
     const add_data = () => {
         var data = get_obj_form('#person_form')
         $.post(base_url + "Person/post", data, (response) => console.log(response), "json");
-        table.ajax.reload()
+        $("#table_data").DataTable().ajax.reload()
         $('#modal-default').modal('hide')
     }
 
@@ -49,12 +47,12 @@
         let id = $('#person_form_edit input[name="id"]').val()
         var data = get_obj_form('#person_form_edit')
         $.post(base_url + "Person/update", data, (response) => console.log(response), "json");
-        table.ajax.reload()
+        $("#table_data").DataTable().ajax.reload()
         $('#modal-edit').modal('hide')
     }
 
     $(() => {
-        table = $("#table_data").DataTable({
+        $("#table_data").DataTable({
             "responsive": true,
             "autoWidth": false,
             "ajax": base_url + "Person/get",
@@ -73,8 +71,14 @@
                 {
                     "data": 'id',
                     render: function(dataField) {
-                        return `<button onclick="open_edit_data(${dataField})"> edit </button> 
-								<button onclick="delete_data(${dataField})"> delete </button>`;
+                        return `<div class="row">
+                                <div class="col">
+                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="open_edit_data(${dataField})"><i class="fas fa-edit"></i></button>
+                                </div>
+                                <div class="col">
+                                <button type="button" class="btn btn-block bg-gradient-danger btn-sm" onclick="delete_data(${dataField})"><i class="fas fa-trash-alt"></i></button>
+                                </div>
+                                </div>`;
                     }
                 }
             ]
@@ -83,13 +87,66 @@
     });
 </script>
 
+<style>
+    .small_button {
+        max-width: 80px;
+    }
+</style>
+
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
+        <!-- a -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">ข้อมูลบุคคล</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
 
-        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-            Add data
-        </button>
+                        <button type="button" class="btn btn-block btn-primary btn-sm small_button mb-3" data-toggle="modal" data-target="#modal-default"><i class="fas fa-plus"></i></button>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">ตารางแสดงข้อมูลบุคคล</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="table_data" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ชื่อจริง</th>
+                                            <th>นามสกุล</th>
+                                            <th>ชื่อเล่น</th>
+                                            <th>อายุ</th>
+                                            <th>ดำเนินการ</th>
+                                        </tr>
+                                    </thead>
+                                    <!-- ajax resource -->
+                                    <tfoot>
+                                        <tr>
+                                            <th>ชื่อจริง</th>
+                                            <th>นามสกุล</th>
+                                            <th>ชื่อเล่น</th>
+                                            <th>อายุ</th>
+                                            <th>ดำเนินการ</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </div>
+            <div class="card-footer">
+                ข้อมูลบุคคล
+            </div>
+        </div>
+        <!-- a -->
 
         <div class="modal fade" id="modal-default" aria-hidden="true" style="display: none;">
             <div class="modal-dialog">
@@ -222,43 +279,7 @@
             <!-- /.modal-dialog -->
         </div>
 
-        <div class="row">
-            <div class="col-12">
 
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Person data</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <table id="table_data" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>firstname</th>
-                                    <th>lastname</th>
-                                    <th>nickname</th>
-                                    <th>age</th>
-                                    <th>operation</th>
-                                </tr>
-                            </thead>
-                            <!-- ajax resource -->
-                            <tfoot>
-                                <tr>
-                                    <th>firstname</th>
-                                    <th>lastname</th>
-                                    <th>nickname</th>
-                                    <th>age</th>
-                                    <th>operation</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
-        </div>
         <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
