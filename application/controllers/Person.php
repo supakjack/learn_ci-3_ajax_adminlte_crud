@@ -1,14 +1,16 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
-require_once(APPPATH . 'controllers/Main_controller.php');
-class Person extends Main_controller
+class Person extends CI_Controller
 {
+    public $post; // set value from post
 
 
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('Main_model', 'model');
+        $this->post = (object) $this->input->post();
         $this->model->table = 'person';
         $this->model->data = $this->post;
     }

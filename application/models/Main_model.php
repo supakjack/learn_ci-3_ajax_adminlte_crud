@@ -40,4 +40,4 @@ class Main_model extends CI_Model
     }
 }
 
-/* End of file M_person.php */
+/* End of file Main_model.php */
